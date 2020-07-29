@@ -1,0 +1,24 @@
+version: '3'
+services:
+    web-push-nginx:
+        container_name: web-push-nginx
+        image: nginx:mainline-alpine
+        ports:
+            - '8180:8080'
+        volumes:
+            - ./nginx_local.conf:/etc/nginx/nginx.conf
+            - ./public/:/www/public/
+        depends_on:
+            - web-push-php
+
+    web-push-php:
+        container_name: web-push-php
+        volumes:
+          - ./:/www
+        build:
+            context: ./
+            dockerfile: Dockerfile
+networks:
+    default:
+        external:
+            name: develop
